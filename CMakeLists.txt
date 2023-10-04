@@ -9,7 +9,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # set(CMAKE_CXX_COMPILER "${CMAKE_SOURCE_DIR}/external/kokkos/bin/nvcc_wrapper")
 # some options in CMAKE && Kokkos need CACHE STRING FORCE set
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-  set(CMAKE_BUILD_TYPE "Debug" CACHE STRING "Choose the type of build." FORCE)
+  set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build." FORCE)
 endif()
 
 PROJECT(CavityKokkos LANGUAGES CXX)
@@ -21,6 +21,14 @@ option(Kokkos_ENABLE_SERIAL "Open while no other backends opened" OFF)
 option(Kokkos_ENABLE_OPENMP "if enable OMP Parallel" ON) # Host Parallel and Device Parallel can exist in the meantime
 option(Kokkos_ENABLE_HIP "if enable Kokkos HIP backend" OFF)
 option(Kokkos_ENABLE_CUDA "if enable Kokkos CUDA backend" ON)
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+  set(Kokkos_ENABLE_SERIAL "ON")
+  set(Kokkos_ENABLE_OPENMP "OFF")
+  set(Kokkos_ENABLE_HIP "OFF")
+  set(Kokkos_ENABLE_CUDA "OFF")
+  add_compile_options(-DDEBUG)
+endif()
 
 # set(Kokkos_BACKEND_ARCH "Kokkos_ARCH_ZEN3") # Host ARCH supported by Kokkos
 # set(Kokkos_BACKEND_ARCH "Kokkos_ARCH_AMPERE86") # CUDA ARCH supported by Kokkos
